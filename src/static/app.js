@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeLoginModal = document.querySelector(".close-login-modal");
   const loginMessage = document.getElementById("login-message");
 
+  // Announcement banner element
+  const announcementBanner = document.getElementById("announcement-banner");
+
   // Activity categories with corresponding colors
   const activityTypes = {
     sports: { label: "Sports", color: "#e8f5e9", textColor: "#2e7d32" },
@@ -361,6 +364,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Default to "academic" if no match
     return "academic";
+  }
+
+  // Function to fetch and display announcements from API
+  async function fetchAnnouncements() {
+    try {
+      const response = await fetch('/announcements');
+      const announcements = await response.json();
+      
+      // Display the first active announcement if any exist
+      const announcementKeys = Object.keys(announcements);
+      if (announcementKeys.length > 0) {
+        const firstAnnouncement = announcements[announcementKeys[0]];
+        announcementBanner.textContent = firstAnnouncement.message;
+        announcementBanner.classList.remove('hidden');
+      }
+    } catch (error) {
+      console.error("Error fetching announcements:", error);
+    }
   }
 
   // Function to fetch activities from API with optional day and time filters
@@ -864,5 +885,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize app
   checkAuthentication();
   initializeFilters();
+  fetchAnnouncements();
   fetchActivities();
 });

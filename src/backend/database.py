@@ -10,6 +10,7 @@ client = MongoClient('mongodb://localhost:27017/')
 db = client['mergington_high']
 activities_collection = db['activities']
 teachers_collection = db['teachers']
+announcements_collection = db['announcements']
 
 # Methods
 
@@ -49,6 +50,11 @@ def init_database():
         for teacher in initial_teachers:
             teachers_collection.insert_one(
                 {"_id": teacher["username"], **teacher})
+
+    # Initialize announcements if empty
+    if announcements_collection.count_documents({}) == 0:
+        for announcement_id, announcement in initial_announcements.items():
+            announcements_collection.insert_one({"_id": announcement_id, **announcement})
 
 
 # Initial database if empty
@@ -207,3 +213,11 @@ initial_teachers = [
         "role": "admin"
     }
 ]
+
+initial_announcements = {
+    "activity_registration": {
+        "message": "📢 Activity registration is open until the end of the month. Don't miss out!",
+        "active": True,
+        "type": "info"
+    }
+}
