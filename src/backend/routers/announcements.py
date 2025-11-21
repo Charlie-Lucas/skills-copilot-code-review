@@ -23,7 +23,8 @@ def get_announcements() -> Dict[str, Any]:
     """
     announcements = {}
     for announcement in announcements_collection.find({"active": True}):
-        announcement_id = announcement.pop('_id')
-        announcements[announcement_id] = announcement
+        announcement_id = announcement['_id']
+        announcement_copy = {k: v for k, v in announcement.items() if k != '_id'}
+        announcements[announcement_id] = announcement_copy
     
     return announcements

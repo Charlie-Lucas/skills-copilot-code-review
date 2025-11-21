@@ -370,6 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchAnnouncements() {
     try {
       const response = await fetch('/announcements');
+      if (!response.ok) throw new Error('Failed to fetch announcements');
       const announcements = await response.json();
       
       // Display the first active announcement if any exist
